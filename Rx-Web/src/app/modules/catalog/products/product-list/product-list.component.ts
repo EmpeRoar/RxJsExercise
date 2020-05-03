@@ -17,6 +17,10 @@ export class ProductListComponent implements OnInit {
     this.productSvc.getList().subscribe(x => {
       this.products = x;
     });
+
+    this.productSvc.getListWithCategories().subscribe(x => {
+      console.log(x);
+    });
   }
 
 }

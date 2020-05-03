@@ -1,8 +1,9 @@
+import { Category } from './../model/category.model';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../model/product.model';
-import { map } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -24,4 +25,27 @@ export class ProductsService {
       });
     }));
   }
+
+  public getListWithCategories(): Observable<any> {
+    return this.http.get(`https://localhost:5001/api/products`).pipe(
+      mergeMap(x => {
+        // here you can use x { Id:1, Name: 'test'} to call to categories
+        // example: categories/1 , categories/2
+        return this.http.get(`https://localhost:5001/api/categories`).pipe(
+          map((res: any[]) => {
+            return res.map(cap => {
+              const m = {
+                  Id: cap.Id,
+                  Name: cap.Name
+              } as Category;
+              return {
+                ...m
+              };
+            });
+          })
+        );
+      })
+    );
+  }
+
 }
