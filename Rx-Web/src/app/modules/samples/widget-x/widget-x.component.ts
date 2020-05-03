@@ -10,9 +10,15 @@ import { Message } from 'src/app/model/message.model';
 })
 export class WidgetXComponent extends MessageDispatcher implements OnInit, OnDestroy {
 
-
+  private tempName: string;
   @Input()
-  name: string;
+  public set name(value: string) {
+    this.tempName = value;
+    this.cmpName;
+  }
+  public get name(): string {
+    return this.tempName;
+  }
 
   messageReceive: string;
   messageStreamSub: Subscription;
@@ -32,7 +38,7 @@ export class WidgetXComponent extends MessageDispatcher implements OnInit, OnDes
   }
 
   ngOnInit(): void {
-
+    this.cmpName = this.name;
   }
 
 }

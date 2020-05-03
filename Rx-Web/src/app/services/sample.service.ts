@@ -24,13 +24,13 @@ export class SampleService {
 
 export class MessageDispatcher {
 
-  private cmpName = 'wdget2';
+  protected cmpName: string;
+
   constructor(protected sampleSvc: SampleService, private messageHandler: (message: Message) => void) {
     this.sampleSvc.MessageStream.pipe(filter(x => {
+
       if (this.cmpName === x.cmpName) {
         return true;
-      }else {
-        return false;
       }
 
     })).subscribe(e => {
