@@ -1,5 +1,5 @@
 import { Category } from './../model/category.model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../model/product.model';
@@ -30,24 +30,45 @@ export class ProductsService {
   // 2. MergeMap and Map Operators
   public getListWithCategories(): Observable<any> {
     return this.http.get(`https://localhost:5001/api/products`).pipe(
-      mergeMap(x => {
-        // here you can use x { Id:1, Name: 'test'} to call to categories
-        // example: categories/1 , categories/2
-        return this.http.get(`https://localhost:5001/api/categories`).pipe(
-          map((res: any[]) => {
-            return res.map(cap => {
-              const m = {
-                  Id: cap.Id,
-                  Name: cap.Name
-              } as Category;
-              return {
-                ...m
-              };
-            });
-          })
-        );
+      mergeMap((x: any[]) => {
+
+        let products = new Subject<Product[]>();
+        let productStream: Observable<Product[]>;
+
+        productStream = products.asObservable();
+
+        x.forEach((product: Product) => {
+
+          // what this should do it determine the categoy of a product man...
+
+          this.http.get(`https://localhost:5001/api/products/category/${1}`).pipe(
+            map((px: any[]) => {
+              return px.map(p => {
+                const m = {
+                    Id: p.Id,
+                    Name: `**${p.Name}**`,
+                    Price: p.Price
+                } as Product;
+                return {
+                  ...m
+                };
+              });
+            })
+          ).subscribe(
+            res => {
+              products.next(res);
+            }
+          );
+        });
+
+        return products;
       })
     );
+  }
+
+
+  public getProductsByCategory(categoryId: number): Observable<any> {
+    return this.http.get(`https://localhost:5001/api/products/category/1`);
   }
 
 }
