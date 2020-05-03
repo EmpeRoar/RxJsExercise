@@ -21,7 +21,10 @@ namespace BFF.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetList()
         {
-            var result = await _appDbContext.Product.Include(x => x.ProductCategoryLinks).ThenInclude(x => x.Category).ToListAsync();
+            var result = await _appDbContext.Product
+                                            .Include(x => x.ProductCategoryLinks)
+                                            .ThenInclude(x => x.Category)
+                                            .ToListAsync();
             return Ok(result);
         }
 
@@ -31,7 +34,8 @@ namespace BFF.Api.Controllers
         {
             return Ok(await _appDbContext.Product
                                          .Include(x => x.ProductCategoryLinks)
-                                         .Where(x => x.ProductCategoryLinks.All(pc => pc.CategoryId == id))
+                                         .Where(x => x.ProductCategoryLinks
+                                                      .Any(pc => pc.CategoryId == id))
                                          .ToListAsync());
         }
     }

@@ -21,9 +21,27 @@ namespace BFF.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetList()
         {
-            var result = await _appDbContext.Category.Include(x => x.ProductCategoryLinks).ThenInclude(x => x.Product).ToListAsync();
+            var result = await _appDbContext.Category
+                                            .Include(x => x.ProductCategoryLinks)
+                                            .ThenInclude(x => x.Product)
+                                            .ToListAsync();
             return Ok(result);
         }
 
+        [HttpGet]
+        [Route("product/{productid}")]
+        public async Task<IActionResult> GetCategoryOfProduct([FromRoute] int productid)
+        {
+            var result = await _appDbContext.Category
+                                            .Include(x => x.ProductCategoryLinks)
+                                            .Where(x => x.ProductCategoryLinks
+                                                         .Any(pc => 
+                                                            pc.ProductId == productid
+                                                         )
+                                            ).FirstOrDefaultAsync();
+                                            
+            return Ok(result);
+        }
+ 
     }
 }
