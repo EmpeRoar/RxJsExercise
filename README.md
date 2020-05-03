@@ -5,7 +5,7 @@
 
 
 #### Pipe (map operator)
-```
+```typescript
  public getList(): Observable<any>{
     return this.http.get(`https://localhost:5001/api/products`).pipe(map((m: any[]) => {
       return m.map(xap => {
