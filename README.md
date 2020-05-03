@@ -21,3 +21,18 @@
   }
 }
 ```
+
+
+```typescript
+export function productsMapper(products) {
+  return products.map(xap => {
+        const x = {
+          Id: xap.Id,
+          Name: xap.Name
+        } as Product;
+        return {
+          ...x
+        };
+     });
+}
+```
