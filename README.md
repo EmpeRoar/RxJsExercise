@@ -4,6 +4,7 @@
 - https://www.learnrxjs.io/
 
 
+
 #### Pipe (map operator)
 ```typescript
  public getList(): Observable<any>{
@@ -22,7 +23,7 @@
 }
 ```
 
-
+#### you can do a mapper here.
 ```typescript
 export function productsMapper(products) {
   return products.map(xap => {
