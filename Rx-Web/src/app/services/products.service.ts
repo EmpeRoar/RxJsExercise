@@ -1,9 +1,9 @@
 import { Category } from './../model/category.model';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../model/product.model';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, combineAll, mergeAll } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class ProductsService {
     return this.http.get(`https://localhost:5001/api/products`).pipe(
       mergeMap((x: any[]) => {
 
-        let products = new Subject<Product[]>();
+        const products = new Subject<Product[]>();
         let productStream: Observable<Product[]>;
 
         productStream = products.asObservable();
@@ -64,6 +64,59 @@ export class ProductsService {
         return products;
       })
     );
+  }
+
+  public getListMergeMapperAll(): Observable<any> {
+
+    const mapper = (products: any[]) => {
+      return products.map(p => {
+        const f = {
+           Id: p.Id,
+           Name: `(${p.Name})`,
+           Price: p.Price
+        } as Product;
+        return f;
+      });
+    };
+
+    const mergeMapper = (products: any[]) => {
+
+      const productStream = new Subject<Product[]>();
+      let ProductStream: Observable<Product[]>;
+      ProductStream = productStream.asObservable();
+
+      products.forEach((px: Product) => {
+        this.http.get(`https://localhost:5001/api/categories/product/${px.Id}`)
+        .pipe(map(
+          (c: any) => {
+            const f = {
+               Id: c.Id,
+               Name: `Catname:${c.Name}`
+            } as Category;
+            return f;
+          }
+        ))
+        .subscribe(
+          cat => {
+            // returns a category
+            const p = {
+                Id: px.Id,
+                Name: `${px.Name} ${cat.Name}`,
+                Price: px.Price
+            } as Product;
+            productStream.next([p]);
+          }
+        );
+      });
+
+      return productStream;
+    };
+
+    const result = this.http.get(`https://localhost:5001/api/products`).pipe(
+          mergeMap(mergeMapper),
+          map(mapper)
+    );
+    return result;
   }
 
 

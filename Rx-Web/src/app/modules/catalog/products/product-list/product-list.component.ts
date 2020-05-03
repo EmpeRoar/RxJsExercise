@@ -20,8 +20,13 @@ export class ProductListComponent implements OnInit {
       // this.products = x;
     });
 
-    this.productSvc.getListWithCategories().subscribe(x => {
+
+    this.productSvc.getListMergeMapperAll().subscribe(x => {
       this.products.push(...x);
+    });
+
+    this.productSvc.getListWithCategories().subscribe(x => {
+      //this.products.push(...x);
     });
 
     this.categorySvc.getListCategoriesAndProducts().subscribe(x => {
@@ -33,6 +38,7 @@ export class ProductListComponent implements OnInit {
       console.log(`products by category`);
       console.log(x);
     });
+
   }
 
 }
