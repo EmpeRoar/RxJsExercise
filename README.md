@@ -38,7 +38,8 @@ export function productsMapper(products) {
 }
 ```
 
-##### Merge Maps
+##### Merge Maps 
+- operators are always returning observables.
 ```typescript
 public getListMergeMapperAll(): Observable<any> {
 
