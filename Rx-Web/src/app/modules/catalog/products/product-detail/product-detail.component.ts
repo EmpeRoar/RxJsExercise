@@ -1,3 +1,4 @@
+import { BusinessLogin, BusinessloginUrl, ServerLink, ServerType } from './../../../../model/businessloginurl.model';
 import { OperatorService } from './../../../../services/operator.service';
 import { Product } from './../../../../model/product.model';
 import { Component, OnInit } from '@angular/core';
@@ -13,8 +14,41 @@ export class ProductDetailComponent implements OnInit {
   constructor(private operatorSvc: OperatorService) { }
 
   ngOnInit(): void {
+    this.interfaceTest();
     this.checkOf();
     this.checkForkJoin();
+  }
+
+  interfaceTest() {
+    const b: BusinessLogin = {
+      url: {
+          api: 'shit',
+          loggin: 'logging',
+          messaging: 'messaging',
+          serverLinks: [
+            {
+              serverType: ServerType.API,
+              url: `(api)`
+            } as ServerLink,
+            {
+              serverType: ServerType.Auth,
+              url: `(auth)`
+            } as ServerLink
+          ]
+      } as BusinessloginUrl
+    } as BusinessLogin;
+    const api = b.url['api'];
+    console.log(`--${api}--`);
+
+    const api3 = b.url.api;
+    console.log(`--${api3}--`);
+
+    const api2 = b.url.serverLinks.filter(x => x.serverType === ServerType.API)[0].url;
+    console.log(`--${api2}--`);
+
+
+
+    console.log(`--${ServerType[ServerType.API]}--`);
   }
 
   checkForkJoin() {
