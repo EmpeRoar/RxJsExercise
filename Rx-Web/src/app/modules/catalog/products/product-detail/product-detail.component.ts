@@ -1,3 +1,4 @@
+import { OperatorService } from './../../../../services/operator.service';
 import { Product } from './../../../../model/product.model';
 import { Component, OnInit } from '@angular/core';
 import { of } from 'rxjs';
@@ -9,10 +10,17 @@ import { of } from 'rxjs';
 })
 export class ProductDetailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private operatorSvc: OperatorService) { }
 
   ngOnInit(): void {
     this.checkOf();
+    this.checkForkJoin();
+  }
+
+  checkForkJoin() {
+    this.operatorSvc.forkJoinTest().subscribe(res => {
+      console.log(res);
+    });
   }
 
   checkOf() {
