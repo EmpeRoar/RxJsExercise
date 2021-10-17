@@ -44,11 +44,16 @@ export class ProductDetailComponent implements OnInit {
     console.log(`--${api3}--`);
 
     const api2 = b.url.serverLinks.filter(x => x.serverType === ServerType.API)[0].url;
-    console.log(`--${api2}--`);
+    console.log(`--2:${api2}--`);
+
+    const api4 = b.url.serverLinks.find(x => x.serverType === ServerType.API).url;
+    console.log(`--4:${api4}--`);
+
+    console.log(`--5:${ServerType[ServerType.API]}--`);
 
 
-
-    console.log(`--${ServerType[ServerType.API]}--`);
+    const api6 = b.url.serverLinks.find(x => ServerType[x.serverType] === ServerType[ServerType.API]).url;
+    console.log(`--6:${api6}--`);
   }
 
   checkForkJoin() {
