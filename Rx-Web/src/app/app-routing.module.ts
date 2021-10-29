@@ -10,6 +10,14 @@ const routes: Routes = [
   {
     path: 'samples',
     loadChildren: () => import(`../app/modules/samples/samples.module`).then(x => x.SamplesModule)
+  },
+  {
+    path:'tests',
+    loadChildren:() => import(`../app/modules/test/test.module`).then(x => x.TestModule)
+  },
+  {
+    path:'**',
+    redirectTo:''
   }
 ];
 
